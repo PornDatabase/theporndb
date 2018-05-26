@@ -1,0 +1,98 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build1:
+  stage: build
+  image: ubuntu
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - dist/
+      - node_modules/
+  before_script:
+    - apt-get -qq update
+    - apt-get install -y curl sudo gnupg --silent
+    - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+    - apt-get install -y nodejs build-essential
+  script:
+    - npm install
+    - npm run build
+
+test1:
+  stage: test
+  image: ubuntu
+  except:
+    - master
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - dist/
+      - node_modules/
+    policy: pull
+  before_script:
+    - apt-get -qq update
+    - apt-get install -y curl sudo gnupg --silent
+    - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+    - sudo apt-get install -y nodejs build-essential
+  script:
+    - npm run test
+
+deploy_forever:
+  stage: deploy
+  image: ubuntu
+  only:
+    - master
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - dist/
+      - node_modules/
+    policy: pull
+  before_script:
+    - apt-get update -y -qq 
+    - apt-get install -y gettext-base
+    - 'which ssh-agent || ( apt-get update -y -qq && apt-get install openssh-client -y --silent )'
+    - eval $(ssh-agent -s)
+    - echo "$DEPLOY_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $SERVER 'rm -rf pdb/* || true'
+    - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $SERVER 'mkdir -p pdb'
+  script:
+    - rm -rf .git package-lock.json node_modules
+    - envsubst < ecosystem.config.js.bak > theporndb.config.js
+    - scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r * "$SERVER:pdb/."
+    - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $SERVER "cd pdb && npm install && pm2 restart theporndb.config.js || pm2 start theporndb.config.js"
+
+deploy_github:
+  stage: deploy
+  image: ubuntu
+  only:
+    - master
+  variables:
+    GIT_STRATEGY: clone
+  before_script:
+    - apt-get -qq update
+    - apt-get install -yqq git
+  script:
+    - git config core.fileMode false
+    - git config commit.gpgsign false
+    - chmod +x github.sh && ./github.sh
+    - git remote rm origin
+    - git remote add origin https://PornDatabase:$GITHUB_KEY@github.com/PornDatabase/theporndb.git
+    - git push --force origin master
+    - rm -rf repo.git
+
+deploy_heroku:
+  stage: deploy
+  image: ubuntu
+  only:
+    - master
+  before_script:
+    - apt-get -qq update
+    - apt-get install -yqq --silent ruby ruby-dev git curl
+  script:
+    - gem install dpl
+    - dpl --provider=heroku --app=pdb1 --api-key=$HEROKU

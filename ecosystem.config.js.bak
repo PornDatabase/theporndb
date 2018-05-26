@@ -1,0 +1,15 @@
+module.exports = {
+  apps : [{
+    name        : "theporndb",
+    script      : "./dist/index.js",
+    watch       : false,
+    instances   : 1,
+    out_file    : "theporndb.out.log",
+    error_file  : "theporndb.err.log",
+    env: {
+      "MONGODB": "${MONGODB}",
+      "PAPERTRAIL_HOST" : "${PAPERTRAIL_HOST}",
+      "PAPERTRAIL_PORT" : "${PAPERTRAIL_PORT}"
+    }
+  }]
+}
