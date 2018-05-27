@@ -1,7 +1,10 @@
 import Logger from "../lib/Logger";
 const mongoose = require('mongoose');
 const log = Logger();
-mongoose.connect(process.env.MONGODB);
+mongoose.connect(process.env.MONGODB)
+  .catch(function(){
+    log.error('Unable to connect to database')
+  });
 
 /**
  * Scene document schema definition

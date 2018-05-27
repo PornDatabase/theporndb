@@ -20,8 +20,28 @@ class Request {
         log.error('Could not scrape ' + url);
         return;
       }
-      control(instance, page);
 
+      page.property('onConsoleMessage',function(msg: string) {
+        console.log('CONSOLE: ' + msg);
+      });
+      await page.evaluate(function() {
+        if (typeof (<any>window).click !== "function") {
+          (<any>window).click = function (el: any) {
+            var ev = document.createEvent('MouseEvent');
+            ev.initMouseEvent(
+              'click',
+              true, true,
+              window, 0,
+              0, 0, 0, 0,
+              false, false, false, false,
+              0, null
+            );
+            el.dispatchEvent(ev);
+          }
+        }
+      });
+
+      await control(instance,page);
       const content = await page.property('content');
       callback(url, cheerio.load(content), ...data);
 
