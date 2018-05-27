@@ -19,9 +19,15 @@ let Scene = mongoose.model('Scene',{
     type: String,
     required: true
   },
-  paysite: String,
+  paysite: {
+    type: String,
+    required: true
+  },
   paysite_id: String,
-  title: String,
+  title: {
+    type: String,
+    required: true
+  },
   url: String,
   image: String,
   date: {
