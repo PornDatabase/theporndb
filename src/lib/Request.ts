@@ -40,14 +40,14 @@ class Request {
           }
         }
       });
-
       await control(instance,page);
+
       const content = await page.property('content');
       callback(url, cheerio.load(content), ...data);
 
       return content;
     }).catch((error: any)=>{
-      log.error( "Phantom browser issues:", error );
+      log.warn( "Phantom browser issues:", error );
     })
   }
 
