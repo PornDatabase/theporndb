@@ -5,7 +5,7 @@ import scrapers from "./scrapers";
 import Logger from "./lib/Logger";
 const log = Logger();
 
-if( process.env.NOAPI ){
+if(! process.env.NOAPI ){
   // define some useful params to be used
   let rarbgAPI = require('rarbg');
   let rarbg = new rarbgAPI();
@@ -55,7 +55,7 @@ if( process.env.NOAPI ){
   log.info('Webserver has started');
 }
 
-if( process.env.NOSCRAPE ){
+if(! process.env.NOSCRAPE ){
   let schedule = require('node-schedule');
   let scraper = new scrapers();
   log.info('Scraping server started');
