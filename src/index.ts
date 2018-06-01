@@ -5,9 +5,7 @@ import scrapers from "./scrapers";
 import Logger from "./lib/Logger";
 const log = Logger();
 
-// check if we are a scraping instance or not
-// this will dicate some of the behaviours of the instance
-if( process.env.NOSCRAPE ){
+if( process.env.NOAPI ){
   // define some useful params to be used
   let rarbgAPI = require('rarbg');
   let rarbg = new rarbgAPI();
@@ -56,7 +54,8 @@ if( process.env.NOSCRAPE ){
   app.listen(port);
   log.info('Webserver has started');
 }
-else{
+
+if( process.env.NOSCRAPE ){
   let schedule = require('node-schedule');
   let scraper = new scrapers();
   log.info('Scraping server started');

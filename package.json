@@ -10,7 +10,7 @@
     "test": "cat package.json",
     "type-check": "tsc --noEmit"
   },
-  "author": "drGroot",
+  "author": "jewishrabbi",
   "devDependencies": {
     "@types/body-parser": "^1.17.0",
     "@types/cheerio": "^0.22.7",
