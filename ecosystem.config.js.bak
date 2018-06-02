@@ -7,6 +7,7 @@ module.exports = {
     out_file    : "theporndb.out.log",
     error_file  : "theporndb.err.log",
     env: {
+      "NOAPI": "NOAPI",
       "MONGODB": "${MONGODB}",
       "PAPERTRAIL_HOST" : "${PAPERTRAIL_HOST}",
       "PAPERTRAIL_PORT" : "${PAPERTRAIL_PORT}"
