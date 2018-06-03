@@ -59,6 +59,7 @@ if(! process.env.NOSCRAPE ){
   let schedule = require('node-schedule');
   let scraper = new scrapers();
   log.info('Scraping server started');
+  scraper.scrape_all();
 
   // scrape every 6 hours
   schedule.scheduleJob('0 */6 * * *',function(){
