@@ -4,7 +4,7 @@ class xart extends Scraper {
   protected site: string[] = ['nb'];
   protected paysite: string[] = ['X-Art'];
   protected url: string[] = ["https://www.x-art.com/videos/recent/%d"];
-  protected increment: number=15;
+  protected increment: number=1;
 
   protected scrape_page(url: string, $:any, index: number, self: any):void {
     let baseurl = 'https://www.x-art.com'

@@ -3,7 +3,7 @@ import Logger from './Logger';
 const phantomPool = require('phantom-pool');
 const log = Logger();
 
-const max_pool = (process.env.MAXPOOL)? process.env.MAXPOOL: 10;
+const max_pool = (process.env.MAXPOOL)? parseInt(process.env.MAXPOOL) : 10;
 const pool = phantomPool({
   max: max_pool,
   min: 1,
