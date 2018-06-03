@@ -21,7 +21,7 @@ class lansky extends Scraper {
         scene.set_site(self.site[index]);
         scene.set_title(info.find('h3.videolist-panel-caption-title').find('a').text());
         scene.set_url(baseurl + info.children('a').attr('href'));
-        scene.set_image(img);
+        scene.set_image(info.find('.panel--large-item').find('img').attr('src'));
         scene.set_date(self.format_date(
           info.find('.icon-calendar').parent()
             .find('.videolist-panel-caption-video-info-data').text(),

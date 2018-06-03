@@ -41,6 +41,23 @@ let Scene = mongoose.model('Scene',{
 });
 
 /**
+ * Returns the input date string as a formatted
+ * string for the database query
+ * @param {string} date
+ * @returns {string}
+ */
+function get_date(date: number): string{
+  var d = new Date(date),
+    month = '' + (d.getUTCMonth() + 1),
+    day = '' + d.getUTCDate(),
+    year = d.getUTCFullYear();
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
+}
+
+/**
  * Database class to handle all database operations
  */
 class Mongo {
@@ -75,10 +92,12 @@ class Mongo {
   }
 
   /**
-   * Returns 100 most recent scenes (release date)
+   * Returns scenes released within the last 7 days.
    */
   public get_latest_scenes(){
-    return Scene.find().limit(100).sort({date:-1});
+    let today = new Date();
+    let date = get_date(today.setDate(today.getDate()-7));
+    return Scene.find({date:{'$gte':date}}).sort({date:-1});
   }
 }
 export default Mongo;

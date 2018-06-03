@@ -17,7 +17,7 @@ class sexyhub extends Scraper {
         scene.set_site(info.find('.site-domain').text());
         scene.set_title(info.find('.card-title').find('a').attr('title'));
         scene.set_url(scene_url);
-        scene.set_image(baseurl + info.children('a').find('img').attr('src'));
+        scene.set_image('https:'+info.find('.card-image').find('img').attr('src'));
         scene.set_date(self.format_date(
           info.find('.release-date').text().trim(),
           'MMM DD, YYYY'
