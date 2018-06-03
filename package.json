@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "rm -rf dist/* && tsc",
-    "test": "cat package.json"
+    "test": "cat package.json",
+    "postinstall": "rm -rf dist/* && tsc"
   },
   "author": "jewishrabbi",
   "dependencies": {
