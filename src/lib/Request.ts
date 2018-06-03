@@ -1,6 +1,6 @@
 import cheerio from 'cheerio';
 import Logger from './Logger';
-import request from 'then-request';
+const request:any = require('request');
 const log = Logger();
 
 
@@ -8,12 +8,12 @@ const log = Logger();
 class Request {
   public scrape(url: string, callback: any, control: any, ...data: any[]){
     try {
-      request('GET', url).done((res) => {
-        if (res.statusCode == 200) {
-          callback(url, cheerio.load(String(res.getBody())), ...data);
+      request(url, function(error: string,response:any,body:string){
+        if ( ! error ) {
+          callback(url, cheerio.load(body), ...data);
         }
         else {
-          log.error(`Cannot scrape url: ${url}, status code: ${res.statusCode}`);
+          log.error(`Cannot scrape url: ${url}, status code: ${error}`);
         }
       });
     }
