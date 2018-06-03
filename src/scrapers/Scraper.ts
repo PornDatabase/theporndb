@@ -44,6 +44,14 @@ class Scraper {
   }
 
   /**
+   * Logs the given message
+   * @param {string} message
+   */
+  protected log(message: string){
+    log.error(message);
+  }
+
+  /**
    * Allows to control web page before passing to scraper
    * @param instance - phantom js page instance
    * @param page - page instance of current state
