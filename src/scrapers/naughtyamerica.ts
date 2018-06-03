@@ -17,7 +17,7 @@ class naughtyamerica extends Scraper {
         scene.set_url(info.children('a').attr('href'));
         scene.set_image('https:' + info.children('a').find('img').attr('src'));
         scene.set_date(self.format_date(info.find('.entry-date').text(), 'MMM DD, YYYY'));
-        scene.set_paysite_id(info.children('a').attr('href').match(/\-(\d+)$/)[1]);
+        scene.set_paysite_id(info.children('a').attr('href').match(/\-(\d+)\?nats/)[1]);
 
         // grab scene description and actors and tags
         self.get_page_content(info.children('a').attr('href'), function (url: string, $: any, scene: any) {
