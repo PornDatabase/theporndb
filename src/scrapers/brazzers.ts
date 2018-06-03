@@ -16,14 +16,20 @@ class brazzers extends Scraper {
       let scene = self.get_sceneObj(self.paysite[0]);
       let scrape_url = baseurl + info.find('.card-image').children('a').attr('href');
 
-      scene.set_site( info.find('.collection.label-small').attr('title') );
-      scene.set_title( info.find('.card-image').children('a').attr('title') );
-      scene.set_url( scrape_url );
-      scene.set_image( 'https:'+info.find('.card-image').find('img').attr('data-src') );
-      scene.set_date(self.format_date( info.find('time').text(),'MMMM DD, YYYY' ));
-      scene.set_paysite_id( 
-        info.find('.card-image').children('a').attr('data-trackid').match(/sceneid=(\d+)/)[1] 
-      );
+      try {
+        scene.set_site(info.find('.collection.label-small').attr('title'));
+        scene.set_title(info.find('.card-image').children('a').attr('title'));
+        scene.set_url(scrape_url);
+        scene.set_image('https:' + info.find('.card-image').find('img').attr('data-src'));
+        scene.set_date(self.format_date(info.find('time').text(), 'MMMM DD, YYYY'));
+        scene.set_paysite_id(
+          info.find('.card-image').children('a').attr('data-trackid').match(/sceneid=(\d+)/)[1]
+        );
+      }
+      catch(e){
+        self.log('Check scraper '+self.paysite[index]);
+      }
+
 
       // grab scene description and actors and tags
       self.get_page_content( scrape_url, function(url: string, $: any, scene:any){
